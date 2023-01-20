@@ -1,380 +1,139 @@
-Monty Interpreter
-A language interpreter made in the C programming language to manage stacks and queues (LIFO and FIFO). The aim is to interpret Monty bytecodes files. Monty is a language that aims to close the gap between scripting and programming languages.
+ Monty Interpreter
+Welcome to the Monty Bytecode Interpreter. This interpreter was built in the C language and is compliant with ISO90, ISO99, & ISO11. It reads Monty bytecode files of any extension (preferably .m although it doesn't matter), and interprets the opcodes contained.
 
-Compilation
-To compile this project, you can use the following command:
+Our interpreter can be run as either a stack (LIFO) or queue (FIFO). Mode can be switched mid-script. The interpreter can handle a variety of Monty opcodes, including printing, mathematical operations, and more - all handled opcodes are listed below.
 
-$ make
-Option Codes
-Push opcode
-The opcode push pushes an element to the stack.
+🏃 Getting Started
+Ubuntu 14.04 LTS - Operating system reqd.
 
-Usage: push <int>, where int is an integer.
+GCC 4.8.4 - Compiler used
 
-Pall opcode
-The opcode pall prints all the values on the stack, starting from the top of the stack.
+⚠️ Prerequisites
+Must have git installed.
 
-Usage: pall. If the stack is empty, pall don’t print anything.
+Must have repository cloned.
 
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/push_pall_0.m
-push 1$
-push 2$
-push 3$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/push_pall_0.m
-3
-2
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Pint opcode
-The opcode pint prints the value at the top of the stack, followed by a new line.
+$ sudo apt-get install git
+⬇️ Installing and Using
+Clone the repository into a new directory:
 
-Usage: pint. If the stack is empty, pint print an error message.
+$ git clone https://github.com/Okothmax/monty.git
+Compile with the following:
 
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/pint.m
-push 1$
-pint$
-push 2$
-pint$
-push 3$
-pint$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/pint.m
-1
-2
-3
-$ amonkeyprogrammer@ubuntu:~/monty$
-Pop opcode
-The opcode pop removes the top element of the stack.
+gcc -Wall -Werror -Wextra -pedantic *.c -o monty
+Run the interpreter on a file:
 
-Usage: pop. If the stack is empty, pop print an error message.
+./monty file.m
+🔧 Monty Opcodes
+push
 
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/pop.m
-push 1$
-push 2$
-push 3$
-pall$
-pop$
-pall$
-pop$
-pall$
-pop$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/pop.m
-3
-2
-1
-2
-1
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Swap opcode
-The opcode swap swaps the top two elements of the stack.
+Usage: push <int>
+Pushes an element to the stack.
+The parameter <int> must be an integer.
+pall
 
-Usage: swap. If the stack contains less than two elements, swap print an error message.
+Prints all values in the stack/queue, starting from the top.
+pint
 
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/swap.m
-push 1$
-push 2$
-push 3$
-pall$
-swap$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/swap.m
-3
-2
-1
-2
-3
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Add opcode
-The opcode add adds the top two elements of the stack. The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
+Prints the top value of the stack/queue.
+pop
 
-The top element of the stack contains the result
-The stack is one element shorter
-Usage: add. If the stack contains less than two elements, add print an error message.
+Removes the top element of the stack/queue.
+swap
 
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/add.m
-push 1$
-push 2$
-push 3$
-pall$
-add$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/swap.m
-3
-2
-1
-5
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Nop opcode
-The opcode nop doesn’t do anything.
+Swaps the top two elements of the stack/queue.
+nop
 
-Usage: nop.
+Does not do anything.
+add
 
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/nop.m
-nop$
-push 1$
-nop$
-push 2$
-nop$
-push 3$
-nop$
-pall$
-nop$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/nop.m
+Adds the top two elements of the stack/queue.
+The result is stored in the second element from the top and the top element is popped.
+sub
+
+Subtracts the top element of the stack/queue from the second element from the top.
+The result is stored in the second element from the top and the top element is removed.
+mul
+
+Multiplies the top two elements of the stack/queue.
+The result is stored in the second element from the top and the top element is removed.
+div
+
+Divides the second element from the top of the stack/queue by the top element.
+The result is stored in the second element from the top and the top element is removed.
+mod
+
+Computes the modulus of the second element from the top of the stack/queue divided by the top element.
+The result is stored in the second element from the top and the top element is removed.
+pchar
+
+Prints the character value of the top element of the stack/queue.
+The integer at the top is treated as an ASCII value.
+pstr
+
+Prints the string contained in the stack/queue.
+Prints characters element by element until the stack/queue is empty, a value is 0, or an error occurs.
+rotl
+
+Rotates the top element of the stack/queue to the bottom.
+rotr
+
+Rotates the bottom element of the stack/queue to the top.
+stack
+
+Switches a queue to stack mode.
+queue
+
+Switches a stack to queue mode.
+▶️ Opcodes preceeded by a # are treated as comments and the corresponding line is ignored.
+
+▶️ Lines can be empty and can contain any number of spaces before or after an opcode and its argument (only the first opcode and/or argument is taken into account).
+
+📋 Examples
+Note, Monty Interpreter runs in the default mode of STACK mode. Meaning it uses a stack. To switch to queue mode, see examples below.
+
+Push values onto the stack and print them all, or the top of the stack/front of queue.
+
+$ cat push_pall_pint.m
+push 1
+push 2
+push 3
+pall
+pint
+$ ./monty push_pall_pint.m
 3
 2
 1
 3
-2
+Using mathmatical operations to add, multiply, divide, etc. Takes the second from the top and performs the operation on the top: second_from_top / top, second_from_top - top, etc. Then assigns that to the second_from_top and pops the top element off the stack.
+
+$ cat math.m
+push 3
+push 2
+push 1
+pall
+mul
+pall
+$ ./monty math.m
 1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Sub opcode
-The opcode sub subtracts the top element of the stack from the second top element of the stack. The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-
-The top element of the stack contains the result
-The stack is one element shorter
-Usage: sub. If the stack contains less than two elements, sub print an error message.
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/sub.m
-push 1$
-push 2$
-push 10$
-push 3$
-sub$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/sub.m
-7
 2
+3
 1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Div opcode
-The opcode div divides the second top element of the stack by the top element of the stack. The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-
-The top element of the stack contains the result
-The stack is one element shorter
-Usage: div. If the stack contains less than two elements, div print an error message.
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/div.m
-push 1$
-push 2$
-push 10$
-push 5$
-div$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/div.m 
-2
-2
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Mul opcode
-The opcode mul multiplies the second top element of the stack with the top element of the stack. The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-
-The top element of the stack contains the result
-The stack is one element shorter
-Usage: mul. If the stack contains less than two elements, mul print an error message.
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/mul.m
-push 1$
-push 2$
-push 20$
-push 5$
-mul$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/mul.m 
-100
-2
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Mod opcode
-The opcode mod computes the rest of the division of the second top element of the stack by the top element of the stack. The result is stored in the second top element of the stack, and the top element is removed, so that at the end:
-
-The top element of the stack contains the result
-The stack is one element shorter
-Usage: mod. If the stack contains less than two elements, mod print an error message.
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/mod.m
-push 1$
-push 2$
-push 20$
-push 5$
-mod$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/mul.m 
-0
-2
-1
-$ amonkeyprogrammer@ubuntu:~/monty$
-Comments
-Every good language comes with the capability of commenting. When the first non-space character of a line is #, treat this line as a comment (don’t do anything).
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/comments.m
-#hello world$
-#hahahaha$
-#cisfun$
-#montyisfun$
-push 10$
-push 2$
-push 8$
-push 5$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/comments.m 
-5
-8
-2
-10
-$ amonkeyprogrammer@ubuntu:~/monty$
-Pchar opcode
-The opcode pchar prints the char at the top of the stack, followed by a new line. The integer stored at the top of the stack is treated as the ascii value of the character to be printed.
-
-Usage: pchar
-
-If the value is not in the ascii table (man ascii), pchar print an error message.
-If the stack is empty, pchar print an error message.
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/pchar.m
-push 72$
-pchar$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/pchar.m 
-H
-$ amonkeyprogrammer@ubuntu:~/monty$
-Pstr opcode
-The opcode pstr prints the string starting at the top of the stack, followed by a new line. The integer stored in each element of the stack is treated as the ascii value of the character to be printed.
-
-Usage: pstr. If the stack is empty, pstr print only a new line
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/pstr.m
-push 1$
-push 2$
-push 3$
-push 4$
-push 0$
-push 110$
-push 0$
-push 121$
-push 116$
-push 110$
-push 111$
-push 77$
-pstr$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/pstr.m 
-Monty
-$ amonkeyprogrammer@ubuntu:~/monty$
-Rotl opcode
-The opcode rotl rotates the stack to the top. The top element of the stack becomes the last one, and the second top element of the stack becomes the first one.
-
-Usage: rotl
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/rotl.m
-push 1$
-push 2$
-push 3$
-push 4$
-push 5$
-push 6$
-push 7$
-push 8$
-push 9$
-push 0$
-pall$
-rotl$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/rotl.m 
-0
-9
-8
-7
 6
-5
-4
-3
-2
-1
-9
-8
-7
-6
-5
-4
-3
-2
-1
-0
-$ amonkeyprogrammer@ubuntu:~/monty$
-Rotr opcode
-The opcode rotr rotates the stack to the bottom. The last element of the stack becomes the top element of the stack.
+Entering queue mode to perform all operations in FIFO (queue) mode instead of default LIFO (stack) mode. Note: does not change current stack, sets front of queue to top of stack.
 
-Usage: rotr
-
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/rotr.m
-push 1$
-push 2$
-push 3$
-push 4$
-push 5$
-push 6$
-push 7$
-push 8$
-push 9$
-push 0$
-pall$
-rotr$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/rotr.m 
-0
-9
-8
-7
-6
-5
-4
-3
-2
-1
-1
-0
-9
-8
-7
-6
-5
-4
-3
-2
-$ amonkeyprogrammer@ubuntu:~/monty$
-Stack opcode
-The opcode stack sets the format of the data to a stack (LIFO). This is the default behavior of the program.
-
-Usage: stack
-
-Queue opcode
-The opcode queue sets the format of the data to a queue (FIFO).
-
-Usage: queue
-
-Switching mode
-The top of the stack becomes the front of the queue
-The front of the queue becomes the top of the stack
-$ amonkeyprogrammer@ubuntu:~/monty$ cat -e bytecodes/queue_stack.m
-queue$
-push 1$
-push 2$
-push 3$
-pall$
-stack$
-push 4$
-push 5$
-push 6$
-pall$
-add$
-pall$
-queue$
-push 11111$
-add$
-pall$
-$ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/queue_stack.m
+$ cat queue.m
+queue
+push 1
+push 2
+push 3
+pall
+stack
+push 4
+push 5
+push 6
+pall
+$ ./monty queue.m
 1
 2
 3
@@ -384,37 +143,3 @@ $ amonkeyprogrammer@ubuntu:~/monty$ ./monty.run bytecodes/queue_stack.m
 1
 2
 3
-11
-4
-1
-2
-3
-15
-1
-2
-3
-11111
-$ amonkeyprogrammer@ubuntu:~/monty$
-Some Brainfuck Tasks
-Brainfuck is an esoteric programming language created in 1993 by Urban Müller. Here are some testing scripts.
-
-Print Holberton
-Write a Brainf*ck script that prints Holberton, followed by a new line.
-
-All your Brainf*ck files should be stored inside the bf sub directory
-You can install the bf interpreter to test your code: sudo apt-get install bf
-Source: bf/1000-holberton.bf
-
-$ amonkeyprogrammer@ubuntu:~/monty/bf$ bf 1000-holberton.bf 
-Holberton
-$ amonkeyprogrammer@ubuntu:~/monty/bf$ 
-Add two digits
-Add two digits given by the user.
-
-Read the two digits from stdin, add them, and print the result
-The total of the two digits with be one digit-long (<10)
-Source: bf/1001-add.bf
-
-$ amonkeyprogrammer@ubuntu:~/monty/bf$ bf ./1001-add.bf
-81
-9$ amonkeyprogrammer@ubuntu:~/monty/bf$
