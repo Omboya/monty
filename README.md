@@ -17,7 +17,7 @@ $ sudo apt-get install git
 ⬇️ Installing and Using
 Clone the repository into a new directory:
 
-$ git clone https://github.com/Okothmax/monty.git
+$ git clone https://github.com/Omboya/monty.git
 Compile with the following:
 
 gcc -Wall -Werror -Wextra -pedantic *.c -o monty
